@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:quickly/classes/restaurants.dart';
 import 'package:quickly/pages/food_page.dart';
-import 'package:quickly/pages/restuarant.dart';
+import 'package:quickly/pages/restuarant_page.dart';
 // import 'package:quickly/widgets/custom_nav_bar.dart';
 import 'package:quickly/pages/order_page.dart';
 import 'package:quickly/pages/cart_page.dart';
@@ -54,6 +54,7 @@ class HomeContentPage extends StatelessWidget {
     final defaultRestaurant = Restaurant(
       name: 'Unknown',
       image: 'assets/images/default.png', // provide a default image
+      backgroundImage: 'assets/images/default.png',
       location: 'Unknown',
       menu: [],
     );
@@ -276,7 +277,9 @@ class HomeContentPage extends StatelessWidget {
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) => FoodDetailsPage(
-                                      food: popularFoods[index]),
+                                      food: popularFoods[index],
+                                      ),
+                                     
                                 ),
                               );
                             },
@@ -287,7 +290,8 @@ class HomeContentPage extends StatelessWidget {
                                   const BoxDecoration(color: Colors.white),
                               margin: const EdgeInsets.only(right: 16),
                               child: Column(
-                                children: [
+                                children: 
+                                [
                                   ClipRRect(
                                     borderRadius: BorderRadius.circular(15),
                                     child: Image.asset(

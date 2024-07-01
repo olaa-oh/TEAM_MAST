@@ -22,12 +22,12 @@ class RestaurantPage extends StatelessWidget {
             ),
             Padding(
               padding:
-                  const EdgeInsets.symmetric(horizontal: 15.0, vertical: 15),
+                  const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20),
               child: Row(
                 children: [
                   CircleAvatar(
                     backgroundImage: AssetImage(restaurant.image),
-                    radius: 30,
+                    radius: 50,
                   ),
                   const SizedBox(width: 10),
                   Column(
@@ -41,51 +41,88 @@ class RestaurantPage extends StatelessWidget {
                         ),
                       ),
                       Text(restaurant.location),
+                      Text(
+                          restaurant.deliveryStatus.toString().split('.').last),
                     ],
                   ),
                 ],
               ),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10),
-              child: const Row(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text("MENU",
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ) // TextStyle
-                      ),
-                ],
-              ),
-            ),
-            Container(
-              height: 400, // Set a fixed height for the ListView.builder
-              child: ListView.builder(
-                itemCount: restaurant.menu.length,
-                itemBuilder: (context, index) {
-                  return GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) =>
-                              FoodDetailsPage(food: restaurant.menu[index]),
+                  const Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "MENU",
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
                         ),
-                      );
-                    },
-                    child: ListTile(
-                      leading: Image.asset(
-                        restaurant.menu[index].image,
-                        width: 50,
-                        height: 50,
-                        fit: BoxFit.cover,
                       ),
-                      title: Text(restaurant.menu[index].name),
-                      subtitle: Text("\$${restaurant.menu[index].price}"),
+                      Text(
+                        "View all",
+                        style: TextStyle(
+                          color: Colors.deepPurple,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      )
+                    ],
+                  ),
+                  SizedBox(height: 10),
+                  Center(
+                    child: Wrap(
+                      alignment: WrapAlignment.center,
+                      spacing: 10,
+                      runSpacing: 10,
+                      children: restaurant.menu.map((food) {
+                        return GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    FoodDetailsPage(food: food),
+                              ),
+                            );
+                          },
+                          child: Container(
+                            width: MediaQuery.of(context).size.width * 1.0,
+                            padding: const EdgeInsets.all(8),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                ClipRRect(
+                                  borderRadius: BorderRadius.circular(10),
+                                  child: Image.asset(
+                                    food.image,
+                                    width: double.infinity,
+                                    height: 280,
+                                    fit: BoxFit.cover,
+                                    // scale: 5.0,
+                                  ),
+                                ),
+                                const SizedBox(height: 10),
+                                Text(
+                                  food.name,
+                                  style: const TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                const SizedBox(height: 5),
+                                Text("\$${food.price}"),
+                              ],
+                            ),
+                          ),
+                        );
+                      }).toList(),
                     ),
-                  );
-                },
+                  ),
+                ],
               ),
             ),
           ],

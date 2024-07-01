@@ -56,6 +56,7 @@ class HomeContentPage extends StatelessWidget {
       image: 'assets/images/default.png', // provide a default image
       backgroundImage: 'assets/images/default.png',
       location: 'Unknown',
+      deliveryStatus: DeliveryStatus.Deliver_and_Pickup,
       menu: [],
     );
 
@@ -230,8 +231,8 @@ class HomeContentPage extends StatelessWidget {
                                       fit: BoxFit.cover,
                                     ),
                                   ),
-                                  // const SizedBox(height: 8),
-                                  // Text(restaurants[index].name),
+                                  const SizedBox(height: 8),
+                                  Text(restaurants[index].name),
                                 ],
                               ),
                             ),

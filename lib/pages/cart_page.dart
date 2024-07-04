@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:quickly/classes/food.dart';
 import 'package:quickly/pages/order_page.dart';
+import 'package:quickly/pages/rtrack_rider.dart';
 
 class CartPage extends StatefulWidget {
   final Food? food;
@@ -26,14 +27,26 @@ class _CartPageState extends State<CartPage> {
         padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 50),
         child: Column(
           children: [
-            const Align(
+            Align(
               alignment: Alignment.topLeft,
-              child: Text(
-                "Cart",
-                style: TextStyle(
-                    fontSize: 25,
-                    fontWeight: FontWeight.w500,
-                    color: Colors.deepPurple),
+              child: Row(
+                children: [
+                  IconButton(
+                    icon: const Icon(Icons.arrow_back_ios_new_outlined,
+                        color: Colors.deepPurple),
+                    onPressed: () {
+                      // back to food details page
+                      Navigator.pop(context, '/food_page');
+                    },
+                  ),
+                  const Text(
+                    "Cart",
+                    style: TextStyle(
+                        fontSize: 25,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.deepPurple),
+                  ),
+                ],
               ),
             ),
             const SizedBox(height: 15),
@@ -121,6 +134,28 @@ class _CartPageState extends State<CartPage> {
                       alignment: Alignment.bottomCenter,
                       child: ElevatedButton(
                         onPressed: _showPaymentDialog,
+                        child: const Text('Pay'),
+                        style: ElevatedButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 40,
+                            vertical: 16,
+                          ),
+                          textStyle: const TextStyle(fontSize: 18),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    Align(
+                      alignment: Alignment.bottomCenter,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    TrackRider(food: widget.food!)),
+                          );
+                        },
                         child: const Text('Checkout'),
                         style: ElevatedButton.styleFrom(
                           padding: const EdgeInsets.symmetric(

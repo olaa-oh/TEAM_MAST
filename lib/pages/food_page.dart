@@ -21,6 +21,16 @@ class _FoodDetailsPageState extends State<FoodDetailsPage> {
     double _total = _subtotal + _deliveryFee;
 
     return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            // go back to restaurant page
+            Navigator.pop(context, '/restaurant_page');
+          },
+        ),
+
+      ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -47,19 +57,12 @@ class _FoodDetailsPageState extends State<FoodDetailsPage> {
                     ),
                   ],
                 ),
+                const SizedBox(height: 8),
                 Align(
                   alignment: Alignment.topLeft,
                   child: Text(
-                    widget.food.description,
-                    style: const TextStyle(fontSize: 16),
-                  ),
-                ),
-                const SizedBox(height: 8),
-                const Align(
-                  alignment: Alignment.topLeft,
-                  child: Text(
                     "Description",
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                 ),
                 Align(

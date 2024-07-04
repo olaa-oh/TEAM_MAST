@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:quickly/pages/cover_page.dart';
-// import 'package:quickly/pages/home_page.dart';
+import 'package:quickly/pages/home_page.dart';
 
 void main() {
   runApp(const MainApp());

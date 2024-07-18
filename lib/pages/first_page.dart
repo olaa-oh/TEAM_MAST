@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:quickly/constants/colors.dart';
-import 'package:quickly/pages/log_in.dart';
+import 'package:quickly/Authentication/Screens/login/log_in.dart';
 
 class FirstPage extends StatefulWidget {
   const FirstPage({super.key});

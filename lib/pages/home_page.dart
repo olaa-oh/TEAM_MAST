@@ -71,7 +71,7 @@ class HomeContentPage extends StatelessWidget {
             child: SingleChildScrollView(
               child: Padding(
                 padding:
-                    const EdgeInsets.symmetric(vertical: 70, horizontal: 25),
+                    const EdgeInsets.symmetric(vertical: 50, horizontal: 25),
                 child: Column(
                   children: [
                     // heading
@@ -81,24 +81,25 @@ class HomeContentPage extends StatelessWidget {
                         Text(
                           "Welcome, Richard",
                           style: TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.w500),
+                              fontSize: 20, fontWeight: FontWeight.bold),
                         ),
                         Row(
                           children: [
                             Icon(Icons.shop_2_outlined, size: 30),
+                            SizedBox(width: 5,),
                             Icon(Icons.notifications_outlined, size: 30),
                           ],
                         ),
                       ],
                     ),
                     const SizedBox(height: 10),
-                    // searchbox
+                    // search box
                     Container(
                       margin: const EdgeInsets.only(top: 8, bottom: 16),
                       padding: const EdgeInsets.symmetric(horizontal: 12),
                       decoration: BoxDecoration(
                         border: Border.all(color: Colors.grey),
-                        borderRadius: BorderRadius.circular(8),
+                        borderRadius: BorderRadius.circular(25),
                       ),
                       child: const TextField(
                         decoration: InputDecoration(
@@ -106,82 +107,18 @@ class HomeContentPage extends StatelessWidget {
                           prefixIcon: Icon(Icons.search),
                           hintText: "Search for food,drinks etc",
                           hintStyle: TextStyle(color: Colors.grey),
+                          contentPadding: EdgeInsets.symmetric(vertical: 15.0),
+
                         ),
                       ),
+
                     ),
                     const SizedBox(height: 10),
+
                     // billboard
-                    Container(
-                      height: 120,
-                      width: 350,
-                      decoration: BoxDecoration(
-                        color: const Color.fromARGB(255, 4, 22, 40),
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                      child: Stack(
-                        children: [
-                          Positioned(
-                            child: Padding(
-                              padding: const EdgeInsets.all(0.0),
-                              child: Container(
-                                width: 220,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Column(
-                                    children: [
-                                      const Align(
-                                        alignment: Alignment.topLeft,
-                                        child: Text(
-                                          "Want some salad?",
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.w500),
-                                        ),
-                                      ),
-                                      const Text(
-                                        "Get free delivery for Jun Tao salad today",
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 15),
-                                      ),
-                                      Align(
-                                        alignment: Alignment.topLeft,
-                                        child: Container(
-                                          decoration: BoxDecoration(
-                                            color: const Color.fromARGB(
-                                                133, 179, 201, 190),
-                                            borderRadius:
-                                                BorderRadius.circular(13),
-                                          ),
-                                          child: const Padding(
-                                            padding: EdgeInsets.symmetric(
-                                                vertical: 5.0,
-                                                horizontal: 18),
-                                            child: Text(
-                                              "Order Now",
-                                              style: TextStyle(
-                                                  color: Colors.white),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                          const Padding(
-                            padding: EdgeInsets.only(left: 250),
-                            child: Image(
-                              image: AssetImage("assets/images/foodie.png"),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(height: 10),
+                    Image.asset('assets/images/order_cta.png', fit: BoxFit.cover),
+
+                    const SizedBox(height: 20),
                     // restaurant row list
                     const Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -189,7 +126,7 @@ class HomeContentPage extends StatelessWidget {
                         Text(
                           "Restaurants",
                           style: TextStyle(
-                              fontSize: 22, fontWeight: FontWeight.w500),
+                              fontSize: 22, fontWeight: FontWeight.bold),
                         ),
                         Text(
                           "View All",
@@ -240,7 +177,7 @@ class HomeContentPage extends StatelessWidget {
                         },
                       ),
                     ),
-                    // const SizedBox(height: 20),
+                    const SizedBox(height: 20),
                     // Popular Foods header
                     const Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -248,7 +185,7 @@ class HomeContentPage extends StatelessWidget {
                         Text(
                           "Popular Foods",
                           style: TextStyle(
-                              fontSize: 22, fontWeight: FontWeight.w500),
+                              fontSize: 22, fontWeight: FontWeight.bold),
                         ),
                         Text(
                           "View All",
@@ -287,8 +224,6 @@ class HomeContentPage extends StatelessWidget {
                             child: Container(
                               height: 200,
                               width: 200,
-                              decoration:
-                                  const BoxDecoration(color: Colors.white),
                               margin: const EdgeInsets.only(right: 16),
                               child: Column(
                                 children: 
@@ -297,12 +232,13 @@ class HomeContentPage extends StatelessWidget {
                                     borderRadius: BorderRadius.circular(15),
                                     child: Image.asset(
                                       popularFoods[index].image,
-                                      height: 200,
-                                      width: 200,
-                                      fit: BoxFit.fill,
+                                      height: 150,
+                                      width: 190,
+                                      fit: BoxFit.cover,
                                     ),
                                   ),
                                   const SizedBox(height: 8),
+
                                   // name of restaurants
                                   Align(
                                     alignment: Alignment.topLeft,

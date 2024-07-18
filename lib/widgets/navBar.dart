@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:quickly/constants/colors.dart';
 
 class CustomNavBar extends StatelessWidget {
   final int currentIndex;
@@ -15,25 +16,30 @@ class CustomNavBar extends StatelessWidget {
     return BottomNavigationBar(
       currentIndex: currentIndex,
       onTap: onTabTapped,
+      showUnselectedLabels: true,
+      selectedItemColor: AppColors.primary,
+      selectedFontSize: 12,
+      unselectedFontSize: 12,
+      unselectedItemColor: Colors.grey[500],
       items: const [
         BottomNavigationBarItem(
           icon: Icon(Icons.home,
-          color: Colors.purple),
+        ),
           label: 'Home',
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.list,
-          color: Colors.purple,),
+        ),
           label: 'Orders',
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.shopping_cart,
-          color: Colors.purple),
+         ),
           label: 'Cart',
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.account_circle,
-          color: Colors.purple),
+         ),
           label: 'Account',
         ),
       ],

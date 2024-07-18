@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:quickly/constants/colors.dart';
 import 'package:quickly/pages/home_page.dart';
 import 'package:quickly/pages/log_in.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class CreateAccount extends StatefulWidget {
   const CreateAccount({super.key});
@@ -11,15 +14,92 @@ class CreateAccount extends StatefulWidget {
 
 class _CreateAccountState extends State<CreateAccount> {
   final _formKey = GlobalKey<FormState>();
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _dobController = TextEditingController();
+  final TextEditingController _contactController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _repeatPasswordController =
       TextEditingController();
 
   @override
   void dispose() {
+    _nameController.dispose();
+    _emailController.dispose();
+    _dobController.dispose();
+    _contactController.dispose();
     _passwordController.dispose();
     _repeatPasswordController.dispose();
     super.dispose();
+  }
+
+  Future<void> _createAccount() async {
+    final String name = _nameController.text;
+    final String email = _emailController.text;
+    final String dob = _dobController.text;
+    final String contact = _contactController.text;
+    final String password = _passwordController.text;
+
+    const url =
+        'https://us-central1-quicklyfoodapi.cloudfunctions.net/quicklyfoodapi/signup';
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return const Center(
+          child: CircularProgressIndicator(),
+        );
+      },
+    );
+    try {
+      final response = await http.post(
+        Uri.parse(url),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(<String, String>{
+          'name': name,
+          'email': email,
+          'dob': dob,
+          'contact': contact,
+          'password': password,
+        }),
+      );
+
+      Navigator.of(context).pop();
+
+      if (response.statusCode == 200) {
+        // Navigate to HomePage if the sign-up is successful
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const HomePage()),
+        );
+      } else {
+        // Handle error response
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(response.body)),
+        );
+      }
+    } catch (e) {
+      // Handle network error
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to sign up: $e')),
+      );
+    }
+  }
+
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(1900),
+      lastDate: DateTime.now(),
+    );
+    if (picked != null && picked != DateTime.now()) {
+      setState(() {
+        _dobController.text = "${picked.toLocal()}".split(' ')[0];
+      });
+    }
   }
 
   @override
@@ -27,7 +107,7 @@ class _CreateAccountState extends State<CreateAccount> {
     return Scaffold(
       body: SingleChildScrollView(
         padding:
-            const EdgeInsets.only(top: 70, left: 40, right: 40, bottom: 40),
+            const EdgeInsets.only(top: 70, left: 25, right: 25, bottom: 40),
         child: Form(
           key: _formKey,
           child: Column(
@@ -50,23 +130,20 @@ class _CreateAccountState extends State<CreateAccount> {
                 "Name",
                 style: TextStyle(
                   fontSize: 16,
-                  fontWeight: FontWeight.w500,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
               Container(
                 margin: const EdgeInsets.only(top: 8, bottom: 16),
-                padding: const EdgeInsets.symmetric(horizontal: 12),
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.grey),
-                  borderRadius: BorderRadius.circular(8),
-                ),
                 child: TextFormField(
+                  controller: _nameController,
                   decoration: const InputDecoration(
-                    border: InputBorder.none,
+                    border: OutlineInputBorder(),
                     prefixIcon: Icon(
-                      Icons.manage_accounts,
+                      Icons.person_2_outlined,
                       color: Colors.grey,
                     ),
+                    contentPadding: EdgeInsets.symmetric(vertical: 15.0),
                     hintText: "Thomas Sarpong",
                     hintStyle: TextStyle(
                       color: Colors.grey,
@@ -84,23 +161,20 @@ class _CreateAccountState extends State<CreateAccount> {
                 "Email",
                 style: TextStyle(
                   fontSize: 16,
-                  fontWeight: FontWeight.w500,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
               Container(
                 margin: const EdgeInsets.only(top: 8, bottom: 16),
-                padding: const EdgeInsets.symmetric(horizontal: 12),
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.grey),
-                  borderRadius: BorderRadius.circular(8),
-                ),
                 child: TextFormField(
+                  controller: _emailController,
                   decoration: const InputDecoration(
-                    border: InputBorder.none,
+                    border: OutlineInputBorder(),
                     prefixIcon: Icon(
-                      Icons.email,
+                      Icons.email_outlined,
                       color: Colors.grey,
                     ),
+                    contentPadding: EdgeInsets.symmetric(vertical: 15.0),
                     hintText: "quarshiemorgan@gmail.com",
                     hintStyle: TextStyle(
                       color: Colors.grey,
@@ -118,36 +192,103 @@ class _CreateAccountState extends State<CreateAccount> {
                 ),
               ),
               const Text(
-                "Password",
+                "Date of Birth",
                 style: TextStyle(
                   fontSize: 16,
-                  fontWeight: FontWeight.w500,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
               Container(
                 margin: const EdgeInsets.only(top: 8, bottom: 16),
-                padding: const EdgeInsets.symmetric(horizontal: 12),
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.grey),
-                  borderRadius: BorderRadius.circular(8),
+                child: GestureDetector(
+                  onTap: () => _selectDate(context),
+                  child: AbsorbPointer(
+                    child: TextFormField(
+                      controller: _dobController,
+                      decoration: const InputDecoration(
+                        border: OutlineInputBorder(),
+                        prefixIcon: Icon(
+                          Icons.calendar_today,
+                          color: Colors.grey,
+                        ),
+                        hintText: "Select your date of birth",
+                        hintStyle: TextStyle(
+                          color: Colors.grey,
+                        ),
+                        contentPadding: EdgeInsets.symmetric(vertical: 15.0),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please select your date of birth';
+                        }
+                        return null;
+                      },
+                    ),
+                  ),
                 ),
+              ),
+              const Text(
+                "Contact",
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Container(
+                margin: const EdgeInsets.only(top: 8, bottom: 16),
+                child: TextFormField(
+                  controller: _contactController,
+                  keyboardType: TextInputType.phone,
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    prefixIcon: Icon(
+                      Icons.phone,
+                      color: Colors.grey,
+                    ),
+                    hintText: "0241234567",
+                    hintStyle: TextStyle(
+                      color: Colors.grey,
+                    ),
+                    contentPadding: EdgeInsets.symmetric(vertical: 15.0),
+                  ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter your contact number';
+                    }
+                    if (!RegExp(r'^[0-9]{10}$').hasMatch(value)) {
+                      return 'Please enter a valid contact number';
+                    }
+                    return null;
+                  },
+                ),
+              ),
+              const Text(
+                "Password",
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Container(
+                margin: const EdgeInsets.only(top: 8, bottom: 16),
                 child: TextFormField(
                   controller: _passwordController,
                   decoration: const InputDecoration(
-                    border: InputBorder.none,
-                    prefixIcon: Icon(Icons.lock, color: Colors.grey),
+                    border: OutlineInputBorder(),
+                    prefixIcon: Icon(Icons.lock_outline, color: Colors.grey),
                     hintText: "**********",
                     hintStyle: TextStyle(
                       color: Colors.grey,
                     ),
+                    contentPadding: EdgeInsets.symmetric(vertical: 15.0),
                   ),
                   obscureText: true,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter your password';
                     }
-                    if (value.length < 6) {
-                      return 'Password must be at least 6 characters long';
+                    if (value.length < 8) {
+                      return 'Password must be at least 8 characters long';
                     }
                     return null;
                   },
@@ -157,25 +298,21 @@ class _CreateAccountState extends State<CreateAccount> {
                 "Repeat Password",
                 style: TextStyle(
                   fontSize: 16,
-                  fontWeight: FontWeight.w500,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
               Container(
                 margin: const EdgeInsets.only(top: 8, bottom: 16),
-                padding: const EdgeInsets.symmetric(horizontal: 12),
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.grey),
-                  borderRadius: BorderRadius.circular(8),
-                ),
                 child: TextFormField(
                   controller: _repeatPasswordController,
                   decoration: const InputDecoration(
-                    border: InputBorder.none,
-                    prefixIcon: Icon(Icons.lock, color: Colors.grey),
+                    border: OutlineInputBorder(),
+                    prefixIcon: Icon(Icons.lock_outline, color: Colors.grey),
                     hintText: "**********",
                     hintStyle: TextStyle(
                       color: Colors.grey,
                     ),
+                    contentPadding: EdgeInsets.symmetric(vertical: 15.0),
                   ),
                   obscureText: true,
                   validator: (value) {
@@ -194,24 +331,21 @@ class _CreateAccountState extends State<CreateAccount> {
                 child: Text(
                   "Forgot Password",
                   style: TextStyle(
-                      color: Colors.purple, fontWeight: FontWeight.w500),
+                      color: AppColors.primary, fontWeight: FontWeight.bold),
                 ),
               ),
               const SizedBox(height: 20),
               GestureDetector(
                 onTap: () {
                   if (_formKey.currentState?.validate() ?? false) {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const HomePage()),
-                    );
+                    _createAccount();
                   }
                 },
                 child: Container(
                   width: double.infinity,
                   padding: const EdgeInsets.symmetric(vertical: 15),
                   decoration: BoxDecoration(
-                    color: Colors.purple,
+                    color: AppColors.primary,
                     borderRadius: BorderRadius.circular(8),
                   ),
                   alignment: Alignment.center,
@@ -232,7 +366,7 @@ class _CreateAccountState extends State<CreateAccount> {
                   style: TextStyle(
                       color: Color.fromARGB(187, 72, 67, 67),
                       fontSize: 16,
-                      fontWeight: FontWeight.w500),
+                      fontWeight: FontWeight.bold),
                 ),
               ),
               const SizedBox(height: 30),
@@ -269,7 +403,7 @@ class _CreateAccountState extends State<CreateAccount> {
                     style: TextStyle(
                         color: Colors.grey,
                         fontSize: 16,
-                        fontWeight: FontWeight.w500),
+                        fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(width: 5),
                   GestureDetector(
@@ -282,9 +416,9 @@ class _CreateAccountState extends State<CreateAccount> {
                     child: const Text(
                       "Log In",
                       style: TextStyle(
-                          color: Colors.purple,
+                          color: AppColors.primary,
                           fontSize: 16,
-                          fontWeight: FontWeight.w500),
+                          fontWeight: FontWeight.bold),
                     ),
                   ),
                 ],

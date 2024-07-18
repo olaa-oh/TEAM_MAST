@@ -5,7 +5,7 @@ import 'package:quickly/pages/food_page.dart';
 class RestaurantPage extends StatelessWidget {
   final Restaurant restaurant;
 
-  const RestaurantPage({Key? key, required this.restaurant}) : super(key: key);
+  const RestaurantPage({super.key, required this.restaurant});
 
   @override
   Widget build(BuildContext context) {
@@ -14,11 +14,35 @@ class RestaurantPage extends StatelessWidget {
         physics: const BouncingScrollPhysics(),
         child: Column(
           children: [
-            Image.asset(
-              restaurant.backgroundImage,
+            Container(
               width: double.infinity,
-              height: 200,
-              fit: BoxFit.cover,
+              height: MediaQuery.of(context).size.height*0.3,
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage(restaurant.backgroundImage),
+                  fit: BoxFit.cover,
+                )
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(15.0),
+                child: Row(
+
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    GestureDetector(
+                      onTap: (){Navigator.pop(context);},
+                      child: Container(
+
+                        padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(color: Colors.white,
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                        child: const Icon(Icons.arrow_back),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ),
             Padding(
               padding:
@@ -27,7 +51,7 @@ class RestaurantPage extends StatelessWidget {
                 children: [
                   CircleAvatar(
                     backgroundImage: AssetImage(restaurant.image),
-                    radius: 50,
+                    radius: 40,
                   ),
                   const SizedBox(width: 10),
                   Column(
@@ -36,7 +60,7 @@ class RestaurantPage extends StatelessWidget {
                       Text(
                         restaurant.name,
                         style: const TextStyle(
-                          fontSize: 20,
+                          fontSize: 25,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -57,7 +81,7 @@ class RestaurantPage extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        "MENU",
+                        "Menu",
                         style: TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.bold,
@@ -100,7 +124,7 @@ class RestaurantPage extends StatelessWidget {
                                   child: Image.asset(
                                     food.image,
                                     width: double.infinity,
-                                    height: 280,
+                                    height: 250,
                                     fit: BoxFit.cover,
                                     // scale: 5.0,
                                   ),
@@ -109,12 +133,12 @@ class RestaurantPage extends StatelessWidget {
                                 Text(
                                   food.name,
                                   style: const TextStyle(
-                                    fontSize: 16,
+                                    fontSize: 20,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
-                                const SizedBox(height: 5),
-                                Text("\$${food.price}"),
+
+                                Text("\$${food.price}", style: const TextStyle(fontSize: 15),),
                               ],
                             ),
                           ),

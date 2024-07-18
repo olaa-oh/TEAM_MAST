@@ -32,8 +32,8 @@ class _CartPageState extends State<CartPage> {
               child: Row(
                 children: [
                   IconButton(
-                    icon: const Icon(Icons.arrow_back_ios_new_outlined,
-                        color: Colors.deepPurple),
+                    icon: const Icon(Icons.arrow_back,
+                        ),
                     onPressed: () {
                       // back to food details page
                       Navigator.pop(context, '/food_page');
@@ -44,7 +44,7 @@ class _CartPageState extends State<CartPage> {
                     style: TextStyle(
                         fontSize: 25,
                         fontWeight: FontWeight.w500,
-                        color: Colors.deepPurple),
+                        ),
                   ),
                 ],
               ),

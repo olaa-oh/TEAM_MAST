@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:quickly/constants/colors.dart';
 import 'package:quickly/pages/create_account.dart';
 import 'package:quickly/pages/home_page.dart';
 
@@ -16,7 +17,7 @@ class _LoginState extends State<Login> {
     Scaffold(
       body: SingleChildScrollView(
         padding:
-            const EdgeInsets.only(top: 100, left: 40, right: 40, bottom: 40),
+            const EdgeInsets.only(top: 100, left: 25, right: 25, bottom: 40),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -37,7 +38,7 @@ class _LoginState extends State<Login> {
               "Email",
               style: TextStyle(
                 fontSize: 16,
-                fontWeight: FontWeight.w500,
+                fontWeight: FontWeight.bold,
               ),
             ),
             Container(
@@ -49,7 +50,14 @@ class _LoginState extends State<Login> {
               ),
               child: const TextField(
                 decoration: InputDecoration(
+                  hintText: 'Enter email',
                   border: InputBorder.none,
+                  prefixIcon: Icon(
+                    Icons.email_outlined,
+                    color: Colors.grey,
+                  ),
+                  contentPadding: EdgeInsets.symmetric(vertical: 15.0),
+
                 ),
               ),
             ),
@@ -57,7 +65,7 @@ class _LoginState extends State<Login> {
               "Password",
               style: TextStyle(
                 fontSize: 16,
-                fontWeight: FontWeight.w500,
+                fontWeight: FontWeight.bold,
               ),
             ),
             Container(
@@ -69,7 +77,14 @@ class _LoginState extends State<Login> {
               ),
               child: const TextField(
                 decoration: InputDecoration(
+                  hintText: 'Enter password',
                   border: InputBorder.none,
+                  prefixIcon: Icon(
+                    Icons.lock_outline,
+                    color: Colors.grey,
+                  ),
+                  contentPadding: EdgeInsets.symmetric(vertical: 15.0),
+
                 ),
                 obscureText: true,
               ),
@@ -79,7 +94,7 @@ class _LoginState extends State<Login> {
               child: Text(
                 "Forgot Password",
                 style: TextStyle(
-                    color: Colors.purple, fontWeight: FontWeight.w500),
+                    color: AppColors.primary, fontWeight: FontWeight.w500),
               ),
             ),
             const SizedBox(height: 20),
@@ -94,7 +109,7 @@ class _LoginState extends State<Login> {
                 width: double.infinity,
                 padding: const EdgeInsets.symmetric(vertical: 15),
                 decoration: BoxDecoration(
-                  color: Colors.purple,
+                  color: AppColors.primary,
                   borderRadius: BorderRadius.circular(8),
                 ),
                 alignment: Alignment.center,
@@ -163,9 +178,9 @@ class _LoginState extends State<Login> {
                   child: const Text(
                     "Sign Up",
                     style: TextStyle(
-                        color: Colors.purple,
+                        color: AppColors.primary,
                         fontSize: 16,
-                        fontWeight: FontWeight.w500),
+                        fontWeight: FontWeight.bold),
                   ),
                 ),
               ],

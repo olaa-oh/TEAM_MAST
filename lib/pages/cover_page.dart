@@ -19,7 +19,7 @@ class _SplashScreenState extends State<SplashScreen>
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
 
     // set a timer when it moves to another page
-    Future.delayed(Duration(seconds: 3), () {
+    Future.delayed(const Duration(seconds: 3), () {
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
           builder: (_) => const FirstPage(),
@@ -43,6 +43,7 @@ class _SplashScreenState extends State<SplashScreen>
           child: Text(
             "QUICKLY",
             style: TextStyle(
+              fontFamily: 'DM Sans',
               fontSize: 30,
               fontWeight: FontWeight.bold,
               color: Colors.purple,

@@ -14,6 +14,7 @@ class MainApp extends StatelessWidget {
     return  MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
+        fontFamily: 'DM Sans',
         colorScheme:ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true
       ),

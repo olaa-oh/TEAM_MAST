@@ -23,32 +23,14 @@ class _CartPageState extends State<CartPage> {
     double _total = _subtotal + _deliveryFee;
 
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('Cart'),
+      ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 50),
         child: Column(
           children: [
-            Align(
-              alignment: Alignment.topLeft,
-              child: Row(
-                children: [
-                  IconButton(
-                    icon: const Icon(Icons.arrow_back,
-                        ),
-                    onPressed: () {
-                      // back to food details page
-                      Navigator.pop(context, '/food_page');
-                    },
-                  ),
-                  const Text(
-                    "Cart",
-                    style: TextStyle(
-                        fontSize: 25,
-                        fontWeight: FontWeight.w500,
-                        ),
-                  ),
-                ],
-              ),
-            ),
+            
             const SizedBox(height: 15),
             if (widget.food != null)
               Expanded(
@@ -59,7 +41,7 @@ class _CartPageState extends State<CartPage> {
                       child: Text(
                         "Restaurant Name",
                         style: TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.w500),
+                            fontSize: 25, fontWeight: FontWeight.bold),
                       ),
                     ),
                     const SizedBox(height: 10),
@@ -218,9 +200,9 @@ class _CartPageState extends State<CartPage> {
   }
 
   void _navigateToOrderPage() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => OrderPage()),
-    );
+    // Navigator.push(
+    //   context,
+    //   MaterialPageRoute(builder: (context) => OrderPage()),
+    // );
   }
 }

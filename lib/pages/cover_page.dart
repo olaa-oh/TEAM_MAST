@@ -68,27 +68,21 @@ class SplashScreen extends StatefulWidget {
   State<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen>
-    with SingleTickerProviderStateMixin {
-
+class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
+    // Removes the status bar at the top of the screen
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
 
-    // Check user authentication state
-    Future.delayed(const Duration(seconds: 3), () async {
-      final FirebaseAuth _auth = FirebaseAuth.instance;
-      final User? user = _auth.currentUser; // Fetch the current user
-
-      if (user != null) {
-        if (user.emailVerified) {
-          Get.offAll(() => const FirstPage());
-        } else {
-          Get.offAll(() => const Login()); // Navigate to Login if email is not verified
-        }
-      } else {
-        Get.offAll(() => const Login()); // Navigate to Login if user is not authenticated
+    // Set a timer to navigate to another page
+    Future.delayed(const Duration(seconds: 3), () {
+      if (mounted) {
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(
+            builder: (_) => const FirstPage(),
+          ),
+        );
       }
     });
   }
@@ -100,6 +94,7 @@ class _SplashScreenState extends State<SplashScreen>
     super.dispose();
   }
 
+  @override
   @override
   Widget build(BuildContext context) {
     return Scaffold(

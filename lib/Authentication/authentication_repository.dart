@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:quickly/authentication/Screens/login/log_in.dart';
@@ -9,6 +10,8 @@ import 'package:quickly/pages/create_account.dart';
 
 class AuthenticationRepository extends GetxController {
   static AuthenticationRepository get instance => Get.find();
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+
 
   // Variables
   // final deviceStorage = GetStorage();
@@ -25,7 +28,7 @@ class AuthenticationRepository extends GetxController {
     final user = _auth.currentUser;
     if (user != null) {
       if (user.emailVerified) {
-        Get.offAll(() => const Login());
+        Get.offAll(() => Login(formKey: formKey));
       } else {
         Get.off(() => const CreateAccount());
       }

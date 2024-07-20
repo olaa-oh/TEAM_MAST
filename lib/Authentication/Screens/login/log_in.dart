@@ -1,10 +1,14 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:quickly/Authentication/controllers/login_controller.dart';
 import 'package:quickly/pages/create_account.dart';
-import 'package:get/get.dart';
 
 class Login extends StatefulWidget {
-  const Login({super.key});
+
+  final GlobalKey<FormState> formKey;
+
+  const Login({super.key, required this.formKey});
 
   @override
   State<Login> createState() => _LoginState();
@@ -16,185 +20,244 @@ class _LoginState extends State<Login> {
     final controller = Get.put(LoginController());
     return Scaffold(
       body: SingleChildScrollView(
-        padding: const EdgeInsets.only(top: 100, left: 40, right: 40, bottom: 40),
-        child: Form(
-          key: controller.loginFormKey,
+        child: Padding(
+          padding: const EdgeInsets.only(
+            // AppBarHeight: 56
+            top: 56,
+            left: 24,
+            bottom: 24,
+            right: 24,
+          ),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                "Log in",
-                style: TextStyle(fontSize: 28, fontWeight: FontWeight.w600),
-              ),
-              const SizedBox(height: 15),
-              const Text(
-                "Welcome back! Please enter your details.",
-                style: TextStyle(
-                  fontSize: 16,
-                  color: Color.fromARGB(255, 74, 84, 88),
-                ),
-              ),
-              const SizedBox(height: 60),
-              const Text(
-                "Email",
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 8, bottom: 16),
-                child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12),
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.grey),
-                    borderRadius: BorderRadius.circular(8),
+              // Spacer(),
+              // Logo, Title & Sub-Title
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // const Image(
+                  //   height: 120,
+                  //   image: AssetImage("assets/images/med_final.png"),
+                  // ),
+                  // const SizedBox(
+                  //   height: 24,
+                  // ),
+                  Text(
+                    "Welcome back,",
+                    style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
                   ),
-                  child: TextFormField(
-                    controller: controller.email,
-                    decoration: const InputDecoration(
-                      border: InputBorder.none,
-                    ),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter your email';
-                      }
-                      if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
-                        return 'Please enter a valid email address';
-                      }
-                      return null;
-                    },
-                  ),
-                ),
+                  const SizedBox(height: 8),
+                  Text(
+                    "Discover closest pharmacies with drugs at an Unmatched Convenience",
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  )
+                ],
               ),
-              const Text(
-                "Password",
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 8, bottom: 16),
-                child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12),
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.grey),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: TextFormField(
-                    controller: controller.password,
-                    decoration: const InputDecoration(
-                      border: InputBorder.none,
-                    ),
-                    obscureText: true,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter your password';
-                      }
-                      return null;
-                    },
-                  ),
-                ),
-              ),
-              const Align(
-                alignment: Alignment.bottomRight,
-                child: Text(
-                  "Forgot Password",
-                  style: TextStyle(
-                      color: Colors.purple, fontWeight: FontWeight.w500),
-                ),
-              ),
-              const SizedBox(height: 20),
-              GestureDetector(
-                onTap: () {
-                  if (controller.loginFormKey.currentState!.validate()) {
-                    controller.emailAndPasswordSignIn();
-                  }
-                },
-                child: Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.symmetric(vertical: 15),
-                  decoration: BoxDecoration(
-                    color: Colors.purple,
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  alignment: Alignment.center,
-                  child: const Text(
-                    "Log In",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 18,
-                      fontWeight: FontWeight.w800,
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 30),
-              const Center(
-                child: Text(
-                  "Or Log in with",
-                  style: TextStyle(
-                      color: Color.fromARGB(187, 72, 67, 67),
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500),
-                ),
-              ),
-              const SizedBox(height: 40),
-              Center(
-                child: Container(
-                  padding: const EdgeInsets.all(12),
-                  decoration: const BoxDecoration(
-                    color: Colors.white,
-                    shape: BoxShape.circle,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black26,
-                        blurRadius: 4,
-                        offset: Offset(2, 2),
+              // Form
+              Form(
+                key: widget.formKey,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 32),
+                  child: Column(
+                    children: [
+                      // Email
+                      TextFormField(
+                        controller: controller.email,
+                        // validator: (value) =>
+                            // FormValidation.validateEmail(value),
+                        decoration: const InputDecoration(
+                          prefixIcon: Icon(Icons.arrow_back),
+                          labelText: "Email",
+                        ),
+                      ),
+                      // SpaceBtwInputFields = 16
+                      const SizedBox(
+                        height: 16,
+                      ),
+
+                      // Password
+                      // Obx(
+                      //   // Toggling password hidden/shown
+
+                      //   () => TextFormField(
+                      //     obscureText: controller.hidepassword.value,
+                      //     controller: controller.password,
+                      //     validator: (value) =>
+                      //         FormValidation.validatePassword(value),
+                      //     decoration: InputDecoration(
+                      //       prefixIcon: Icon(Iconsax.password_check),
+                      //       labelText: "Password",
+                      //       suffixIcon: IconButton(
+                      //         onPressed: () => controller.hidepassword.value =
+                      //             !controller.hidepassword.value,
+                      //         icon: Icon(
+                      //           controller.hidepassword.value
+                      //               ? Iconsax.eye_slash
+                      //               : Iconsax.eye,
+                      //         ),
+                      //       ),
+                      //     ),
+                      //   ),
+                      // ),
+                      const SizedBox(
+                        height: 8,
+                      ),
+
+                      // Remember Me & Forgot Password
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          // Remember Me
+                          // Row(
+                          //   children: [
+                          //     Obx(() => Checkbox(
+                          //         value: controller.rememberMe.value,
+                          //         onChanged: (value) => controller.rememberMe
+                          //             .value = !controller.rememberMe.value)),
+                          //     const Text("Remember Me")
+                          //   ],
+                          // ),
+
+                          // Forgot Password
+                          // TextButton(
+                          //   onPressed: () =>
+                          //       // Get.to(() => const ForgetPassword()),
+                          //   child: const Text("Forgot Password?"),
+                          // ),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 32,
+                      ),
+
+                      // Sign In Button
+                      SizedBox(
+                        width: double.infinity,
+                        height: 45,
+                        child: ElevatedButton(
+                          onPressed: () => controller.emailAndPasswordSignIn(),
+                          style: ElevatedButton.styleFrom(
+                            foregroundColor: Colors.white,
+                            backgroundColor: Colors.blue, // Text color
+                            shape: RoundedRectangleBorder(
+                              borderRadius:
+                                  BorderRadius.circular(8), // Border radius
+                            ),
+                          ),
+                          child: const Text(
+                            "Sign In",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 18,
+                            ),
+                          ),
+                        ),
+                      ),
+
+                      const SizedBox(
+                        height: 16,
+                      ),
+
+                      // Create Account Button
+                      SizedBox(
+                        width: double.infinity,
+                        height: 45,
+                        child: OutlinedButton(
+                          onPressed: () => Get.to(
+                            () => const CreateAccount(),
+                          ),
+                          style: ElevatedButton.styleFrom(
+                            foregroundColor:
+                                const Color.fromARGB(255, 10, 0, 0),
+                            shape: RoundedRectangleBorder(
+                              borderRadius:
+                                  BorderRadius.circular(8), // Border radius
+                            ),
+                          ),
+                          child: const Text(
+                            "Create Account",
+                            style: TextStyle(
+                              color: Color.fromARGB(255, 10, 10, 10),
+                              fontSize: 16,
+                            ),
+                          ),
+                        ),
                       ),
                     ],
                   ),
-                  child: IconButton(
-                    onPressed: () {
-                      controller.googleSignIn();
-                    },
-                    icon: const Image(
-                      width: 24,
-                      height: 24,
-                      image: AssetImage("assets/images/google.png"),
-                    ),
-                  ),
                 ),
               ),
-              const SizedBox(height: 40),
+
+              // Divider
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Text(
-                    "Don't have an account?",
-                    style: TextStyle(
-                        color: Colors.grey,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  const SizedBox(width: 5),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const CreateAccount(),
-                        ),
-                      );
-                    },
-                    child: const Text(
-                      "Sign Up",
-                      style: TextStyle(
-                          color: Colors.purple,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500),
+                  const Flexible(
+                    child: Divider(
+                      color: Color.fromARGB(255, 46, 46, 46),
+                      thickness: 0.5,
+                      indent: 60,
+                      endIndent: 5,
                     ),
+                  ),
+                  Text(
+                    "or sign in with".capitalize!,
+                    style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                          color: Colors.grey,
+                        ),
+                  ),
+                  const Flexible(
+                    child: Divider(
+                      color: Color.fromARGB(255, 46, 46, 46),
+                      thickness: 0.5,
+                      indent: 5,
+                      endIndent: 60,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(
+                height: 16,
+              ),
+              // Footer
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.grey),
+                      borderRadius: BorderRadius.circular(100),
+                    ),
+                    child: IconButton(
+                      onPressed: () {
+                        print("Google sign-in button pressed");
+                        controller.googleSignIn();
+                      },
+                      icon: const Image(
+                        width: 24,
+                        height: 24,
+                        image: AssetImage("assets/images/google.png"),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 16,
+                  ),
+                  Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.grey),
+                      borderRadius: BorderRadius.circular(100),
+                    ),
+                    // child: IconButton(
+                    //   onPressed: () {},
+                    //   icon: const Image(
+                    //     width: 24,
+                    //     height: 24,
+                    //     image: AssetImage("assets/images/facebook-logo.png"),
+                    //   ),
+                    // ),
                   ),
                 ],
               ),

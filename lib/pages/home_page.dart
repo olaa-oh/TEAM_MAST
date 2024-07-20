@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:quickly/classes/restaurants.dart';
 import 'package:quickly/pages/food_page.dart';
+import 'package:quickly/pages/profile_page.dart';
 import 'package:quickly/pages/restuarant_page.dart';
 // import 'package:quickly/widgets/custom_nav_bar.dart';
 import 'package:quickly/pages/order_page.dart';
 import 'package:quickly/pages/cart_page.dart';
-import 'package:quickly/pages/account_page.dart';
 import 'package:quickly/widgets/navBar.dart';
 
 class HomePage extends StatefulWidget {
@@ -20,9 +20,9 @@ class _HomePageState extends State<HomePage> {
 
   final List<Widget> _pages = [
     HomeContentPage(),
-    OrderPage(),
+    // OrderPage(),
     CartPage(),
-    AccountPage(),
+    ProfilePage(),
   ];
 
   void _onTabTapped(int index) {

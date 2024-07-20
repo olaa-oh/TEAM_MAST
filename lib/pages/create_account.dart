@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:quickly/constants/colors.dart';
 import 'package:quickly/pages/home_page.dart';
 import 'package:quickly/Authentication/Screens/login/log_in.dart';
@@ -408,10 +409,7 @@ class _CreateAccountState extends State<CreateAccount> {
                   const SizedBox(width: 5),
                   GestureDetector(
                     onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => const Login()),
-                      );
+                       Get.to(() => Login(formKey: GlobalKey<FormState>()));
                     },
                     child: const Text(
                       "Log In",

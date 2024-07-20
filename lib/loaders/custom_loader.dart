@@ -3,14 +3,21 @@ import 'package:get/get.dart';
 import 'package:quickly/loaders/animation_loader.dart';
 
 class FullScreenLoader {
-  static void openLoadingDialog(String text, String animation) {
+  static void openLoadingDialog(String text, String animation, {BuildContext? fallbackContext}) {
+    final BuildContext? overlayContext = Get.overlayContext ?? fallbackContext;
+    if (overlayContext == null) {
+      // Handle null overlay context scenario
+      print('Error: Get.overlayContext is null');
+      return;
+    }
+    
     showDialog(
-      context: Get.overlayContext!,
+      context: overlayContext,
       barrierDismissible: false,
       builder: (_) => PopScope(
         canPop: false,
         child: Container(
-          color: Colors.white,
+          color: Colors.white.withOpacity(0.5),
           width: double.infinity,
           height: double.infinity,
           child: Column(
@@ -26,7 +33,14 @@ class FullScreenLoader {
     );
   }
 
-  static stopLoading() {
-    Navigator.of(Get.overlayContext!).pop(); // Close dialog using Navigator
+  static void stopLoading({BuildContext? fallbackContext}) {
+    final BuildContext? overlayContext = Get.overlayContext ?? fallbackContext;
+    if (overlayContext == null) {
+      // Handle null overlay context scenario
+      print('Error: Get.overlayContext is null');
+      return;
+    }
+    
+    Navigator.of(overlayContext).pop(); // Close dialog using Navigator
   }
 }

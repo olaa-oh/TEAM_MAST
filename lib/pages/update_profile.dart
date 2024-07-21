@@ -1,7 +1,7 @@
-// ignore_for_file: prefer_const_constructors
-
 import 'package:flutter/material.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:quickly/constants/colors.dart';
+import 'package:quickly/Authentication/services/account_service.dart';
 
 class UpdateProfile extends StatefulWidget {
   const UpdateProfile({super.key});
@@ -11,8 +11,52 @@ class UpdateProfile extends StatefulWidget {
 }
 
 class _UpdateProfileState extends State<UpdateProfile> {
-  final String _firstName = 'Thomas';
-  final String _profilePicture = 'assets/images/e.jpeg';
+  final storage = GetStorage();
+  final _formKey = GlobalKey<FormState>();
+
+  late TextEditingController _nameController;
+  late TextEditingController _emailController;
+  late TextEditingController _contactController;
+  late TextEditingController _dobController;
+
+  @override
+  void initState() {
+    super.initState();
+    _nameController = TextEditingController(text: storage.read('name') ?? '');
+    _emailController =
+        TextEditingController(text: storage.read('user_email') ?? '');
+    _contactController =
+        TextEditingController(text: storage.read('contact') ?? '');
+    _dobController = TextEditingController(text: storage.read('dob') ?? '');
+
+    print(_emailController.text);
+  }
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _emailController.dispose();
+    _contactController.dispose();
+    _dobController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _handleProfileUpdate() async {
+    print(_nameController.text);
+    if (_formKey.currentState!.validate()) {
+      await updateProfile(
+        context: context,
+        userEmail: _emailController.text,
+        contact: _contactController.text,
+      );
+
+      // Update was successful, refresh the local state
+      setState(() {
+        storage.write('user_email', _emailController.text);
+        storage.write('contact', _contactController.text);
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,208 +67,197 @@ class _UpdateProfileState extends State<UpdateProfile> {
       body: SingleChildScrollView(
         child: Container(
           padding: const EdgeInsets.all(25),
-          child: Column(children: [
-            // Profile Picture
-            Stack(
+          child: Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                CircleAvatar(
-                  radius: 60,
-                  backgroundColor: Colors.grey[200],
-                  backgroundImage: AssetImage(_profilePicture),
-                  child: Text(
-                    _firstName[0],
-                    style: TextStyle(
-                      fontSize: 40,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.grey,
+                // Profile Picture
+                Stack(
+                  children: [
+                    CircleAvatar(
+                      radius: 60,
+                      backgroundColor: Colors.grey[200],
+                      child: Text(
+                        _nameController.text.isNotEmpty
+                            ? _nameController.text[0].toUpperCase()
+                            : '',
+                        style: TextStyle(
+                          fontSize: 40,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.grey,
+                        ),
+                      ),
+                    ),
+                    Positioned(
+                      bottom: 0,
+                      right: 0,
+                      child: GestureDetector(
+                        onTap: () {
+                          // Change profile picture functionality
+                        },
+                        child: Container(
+                          width: 35,
+                          height: 35,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(100),
+                            color: AppColors.primary,
+                          ),
+                          child: const Icon(
+                            Icons.camera_alt,
+                            color: Colors.white,
+                            size: 20,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+
+                const SizedBox(height: 20),
+
+                // Name
+                const Text(
+                  "Name",
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Container(
+                  margin: const EdgeInsets.only(top: 8, bottom: 16),
+                  child: TextFormField(
+                    enabled: false,
+                    controller: _nameController,
+                    decoration: InputDecoration(
+                      hintText: _nameController.text,
+                      border: OutlineInputBorder(),
+                      prefixIcon: Icon(
+                        Icons.person_2_outlined,
+                        color: Colors.grey,
+                      ),
+                      contentPadding: EdgeInsets.symmetric(vertical: 15.0),
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter your name';
+                      }
+                      return null;
+                    },
+                  ),
+                ),
+
+                // Email
+                const Text(
+                  "Email",
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Container(
+                  margin: const EdgeInsets.only(top: 8, bottom: 16),
+                  child: TextFormField(
+                    controller: _emailController,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      prefixIcon: Icon(
+                        Icons.email_outlined,
+                        color: Colors.grey,
+                      ),
+                      contentPadding: EdgeInsets.symmetric(vertical: 15.0),
                     ),
                   ),
                 ),
-                GestureDetector(
-                  onTap: () {
-                    // Change profile picture
+
+                // Contact
+                const Text(
+                  "Contact",
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Container(
+                  margin: const EdgeInsets.only(top: 8, bottom: 16),
+                  child: TextFormField(
                     
-                  },
-                  child: Positioned(
-                    bottom: 0,
-                    right: 0,
-                    child: Container(
-                      width: 35,
-                      height: 35,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(100),
-                          color: AppColors.primary),
-                      child: const Icon(
-                        Icons.camera_alt,
+                    controller: _contactController,
+                    decoration: InputDecoration(
+                      hintText: _contactController.text,
+                      border: OutlineInputBorder(),
+                      prefixIcon: Icon(
+                        Icons.phone,
+                        color: Colors.grey,
+                      ),
+                      contentPadding: EdgeInsets.symmetric(vertical: 15.0),
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter your contact number';
+                      }
+                      return null;
+                    },
+                  ),
+                ),
+
+                // Date of Birth
+                const Text(
+                  "Date of Birth",
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Container(
+                  margin: const EdgeInsets.only(top: 8, bottom: 16),
+                  child: TextFormField(
+                    enabled: false,
+                    controller: _dobController,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      prefixIcon: Icon(
+                        Icons.calendar_today,
+                        color: Colors.grey,
+                      ),
+                      contentPadding: EdgeInsets.symmetric(vertical: 15.0),
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter your date of birth';
+                      }
+                      return null;
+                    },
+                  ),
+                ),
+
+                const SizedBox(height: 15),
+
+                // Save Button
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: _handleProfileUpdate,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.primary,
+                      padding: const EdgeInsets.all(15),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    child: const Text(
+                      'Edit Profile',
+                      style: TextStyle(
+                        fontSize: 16,
                         color: Colors.white,
-                        size: 20,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
                 ),
               ],
             ),
-
-            const SizedBox(height: 20),
-
-            Form(
-                child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                  // Name
-                  const Text(
-                    "Name",
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Container(
-                    margin: const EdgeInsets.only(top: 8, bottom: 16),
-                    child: TextFormField(
-                      decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                        prefixIcon: Icon(
-                          Icons.person_2_outlined,
-                          color: Colors.grey,
-                        ),
-                        contentPadding: EdgeInsets.symmetric(vertical: 15.0),
-                        hintText: "Thomas Sarpong",
-                        hintStyle: TextStyle(
-                          color: Colors.grey,
-                        ),
-                      ),
-                    ),
-                  ),
-
-                  // Email
-                  const Text(
-                    "Email",
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Container(
-                    margin: const EdgeInsets.only(top: 8, bottom: 16),
-                    child: TextFormField(
-                      decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                        prefixIcon: Icon(
-                          Icons.email_outlined,
-                          color: Colors.grey,
-                        ),
-                        contentPadding: EdgeInsets.symmetric(vertical: 15.0),
-                        hintText: "quarshiemorgan@gmail.com",
-                        hintStyle: TextStyle(
-                          color: Colors.grey,
-                        ),
-                      ),
-                    ),
-                  ),
-
-                  // Password
-                  const Text(
-                    "Password",
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Container(
-                    margin: const EdgeInsets.only(top: 8, bottom: 16),
-                    child: TextFormField(
-                      decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                        prefixIcon: Icon(
-                          Icons.lock_outline,
-                          color: Colors.grey,
-                        ),
-                        contentPadding: EdgeInsets.symmetric(vertical: 15.0),
-                        hintText: "********",
-                        hintStyle: TextStyle(
-                          color: Colors.grey,
-                        ),
-                      ),
-                    ),
-                  ),
-
-                  // Contact
-                  const Text(
-                    "Contact",
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Container(
-                    margin: const EdgeInsets.only(top: 8, bottom: 16),
-                    child: TextFormField(
-                      decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                        prefixIcon: Icon(
-                          Icons.phone,
-                          color: Colors.grey,
-                        ),
-                        contentPadding: EdgeInsets.symmetric(vertical: 15.0),
-                        hintText: "+233 123 456 789",
-                        hintStyle: TextStyle(
-                          color: Colors.grey,
-                        ),
-                      ),
-                    ),
-                  ),
-
-                  // Date of Birth
-                  const Text(
-                    "Date of Birth",
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Container(
-                    margin: const EdgeInsets.only(top: 8, bottom: 16),
-                    child: TextFormField(
-                      decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                        prefixIcon: Icon(
-                          Icons.calendar_today,
-                          color: Colors.grey,
-                        ),
-                        contentPadding: EdgeInsets.symmetric(vertical: 15.0),
-                        hintText: "01/01/2000",
-                        hintStyle: TextStyle(
-                          color: Colors.grey,
-                        ),
-                      ),
-                    ),
-                  ),
-
-                  const SizedBox(height: 15),
-
-                  // Save Button
-                  SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        // Save the profile
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.primary,
-                        padding: const EdgeInsets.all(15),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10)),
-                      ),
-                      child: const Text('Edit Profile',
-                          style: TextStyle(
-                              fontSize: 16,
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold)),
-                    ),
-                  ),
-                ])),
-          ]),
+          ),
         ),
       ),
     );

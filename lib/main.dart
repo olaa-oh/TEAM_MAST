@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:quickly/Authentication/authentication_repository.dart';
 import 'package:quickly/Authentication/controllers/login_controller.dart';
 import 'package:quickly/firebase_options.dart';
@@ -14,6 +15,7 @@ void main() async {
       .then((FirebaseApp value) {
     Get.put(AuthenticationRepository());
     Get.put(LoginController(), permanent: true); // Add LoginController here
+    GetStorage.init();
   });
 
   runApp(const MainApp());

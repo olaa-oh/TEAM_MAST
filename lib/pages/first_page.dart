@@ -79,7 +79,7 @@ class _FirstPageState extends State<FirstPage> {
                         ),
                         GestureDetector(
                           onTap: () {
-                            Get.to(() => Login(formKey: GlobalKey<FormState>()));
+                            Get.to(() => const Login());
                           },
                           child: Container(
                             width: MediaQuery.of(context).size.width,

@@ -10,7 +10,7 @@ import 'package:quickly/pages/create_account.dart';
 
 class AuthenticationRepository extends GetxController {
   static AuthenticationRepository get instance => Get.find();
-  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  // final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
 
   // Variables
@@ -28,7 +28,7 @@ class AuthenticationRepository extends GetxController {
     final user = _auth.currentUser;
     if (user != null) {
       if (user.emailVerified) {
-        Get.offAll(() => Login(formKey: formKey));
+        Get.offAll(() => const Login());
       } else {
         Get.off(() => const CreateAccount());
       }

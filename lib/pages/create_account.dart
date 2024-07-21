@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:quickly/Authentication/services/account_service.dart';
 import 'package:quickly/constants/colors.dart';
 import 'package:quickly/pages/home_page.dart';
 import 'package:quickly/Authentication/Screens/login/log_in.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:quickly/Authentication/controllers/login_controller.dart';
 
 class CreateAccount extends StatefulWidget {
   const CreateAccount({super.key});
@@ -34,61 +36,7 @@ class _CreateAccountState extends State<CreateAccount> {
     super.dispose();
   }
 
-  Future<void> _createAccount() async {
-    final String name = _nameController.text;
-    final String email = _emailController.text;
-    final String dob = _dobController.text;
-    final String contact = _contactController.text;
-    final String password = _passwordController.text;
-
-    const url =
-        'https://us-central1-quicklyfoodapi.cloudfunctions.net/quicklyfoodapi/signup';
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return const Center(
-          child: CircularProgressIndicator(),
-        );
-      },
-    );
-    try {
-      final response = await http.post(
-        Uri.parse(url),
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        body: jsonEncode(<String, String>{
-          'name': name,
-          'email': email,
-          'dob': dob,
-          'contact': contact,
-          'password': password,
-        }),
-      );
-
-      Navigator.of(context).pop();
-
-      if (response.statusCode == 200) {
-        // Navigate to HomePage if the sign-up is successful
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => const HomePage()),
-        );
-      } else {
-        // Handle error response
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(response.body)),
-        );
-      }
-    } catch (e) {
-      // Handle network error
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to sign up: $e')),
-      );
-    }
-  }
-
+ 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
@@ -102,6 +50,8 @@ class _CreateAccountState extends State<CreateAccount> {
       });
     }
   }
+
+  
 
   @override
   Widget build(BuildContext context) {
@@ -335,11 +285,20 @@ class _CreateAccountState extends State<CreateAccount> {
                       color: AppColors.primary, fontWeight: FontWeight.bold),
                 ),
               ),
+
+              // Sign Up Button
               const SizedBox(height: 20),
               GestureDetector(
                 onTap: () {
                   if (_formKey.currentState?.validate() ?? false) {
-                    _createAccount();
+                    createAccount(
+                      context: context,
+                      name: _nameController.text,
+                      email: _emailController.text,
+                      dob: _dobController.text,
+                      contact: _contactController.text,
+                      password: _passwordController.text,
+                    );
                   }
                 },
                 child: Container(
@@ -372,26 +331,31 @@ class _CreateAccountState extends State<CreateAccount> {
               ),
               const SizedBox(height: 30),
               Center(
-                child: Container(
-                  padding: const EdgeInsets.all(12),
-                  decoration: const BoxDecoration(
-                    color: Colors.white,
-                    shape: BoxShape.circle,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black26,
-                        blurRadius: 4,
-                        offset: Offset(2, 2),
-                      ),
-                    ],
-                  ),
-                  child: const Image(
-                    image: AssetImage(
-                      'assets/images/google.png',
+                child: GestureDetector(
+                  onTap: () {
+                    Get.find<LoginController>().googleSignIn();
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: const BoxDecoration(
+                      color: Colors.white,
+                      shape: BoxShape.circle,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black26,
+                          blurRadius: 4,
+                          offset: Offset(2, 2),
+                        ),
+                      ],
                     ),
-                    fit: BoxFit.cover,
-                    width: 40,
-                    height: 40,
+                    child: const Image(
+                      image: AssetImage(
+                        'assets/images/google.png',
+                      ),
+                      fit: BoxFit.cover,
+                      width: 40,
+                      height: 40,
+                    ),
                   ),
                 ),
               ),
@@ -409,7 +373,7 @@ class _CreateAccountState extends State<CreateAccount> {
                   const SizedBox(width: 5),
                   GestureDetector(
                     onTap: () {
-                       Get.to(() => Login(formKey: GlobalKey<FormState>()));
+                       Get.to(() => const Login());
                     },
                     child: const Text(
                       "Log In",

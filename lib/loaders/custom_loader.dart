@@ -20,13 +20,15 @@ class FullScreenLoader {
           color: Colors.white.withOpacity(0.5),
           width: double.infinity,
           height: double.infinity,
-          child: Column(
-            children: [
-              const SizedBox(
-                height: 250,
-              ),
-              AnimationLoaderWidget(text: text, animation: animation),
-            ],
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                const SizedBox(
+                  height: 250,
+                ),
+                AnimationLoaderWidget(text: text, animation: animation),
+              ],
+            ),
           ),
         ),
       ),

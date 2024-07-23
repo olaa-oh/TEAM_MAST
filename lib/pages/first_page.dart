@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:quickly/constants/colors.dart';
 import 'package:quickly/Authentication/Screens/login/log_in.dart';
 
@@ -77,8 +79,7 @@ class _FirstPageState extends State<FirstPage> {
                         ),
                         GestureDetector(
                           onTap: () {
-                            Navigator.push(context,
-                              MaterialPageRoute(builder: (context) => const Login()),);
+                            Get.to(() => const Login());
                           },
                           child: Container(
                             width: MediaQuery.of(context).size.width,

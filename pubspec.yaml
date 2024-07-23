@@ -18,8 +18,10 @@ dependencies:
   firebase_auth: ^4.20.0
   cloud_firestore: ^4.17.5
   google_sign_in: ^6.2.1
-  iconsax_flutter: any
+  iconsax_flutter: ^1.0.0
   connectivity_plus: ^5.0.1
+  get_storage: ^2.1.1
+  shimmer: ^3.0.0
 
 dev_dependencies:
   flutter_test:
@@ -36,4 +38,5 @@ flutter:
     - family: DM Sans
       fonts:
         - asset: assets/fonts/DMSans-VariableFont_opsz,wght.ttf
+
       

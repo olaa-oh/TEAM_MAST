@@ -6,6 +6,8 @@ import 'package:quickly/Authentication/authentication_repository.dart';
 import 'package:quickly/Authentication/controllers/login_controller.dart';
 import 'package:quickly/firebase_options.dart';
 import 'package:quickly/pages/cover_page.dart';
+import 'package:quickly/pages/home_page.dart';
+import 'package:quickly/pages/restuarant_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -33,6 +35,6 @@ class MainApp extends StatelessWidget {
             fontFamily: 'DM Sans',
             colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
             useMaterial3: true),
-        home: const SplashScreen());
+        home:  HomePage());
   }
 }

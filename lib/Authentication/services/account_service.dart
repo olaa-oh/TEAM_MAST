@@ -40,7 +40,7 @@ class EmailVerificationService {
           title: 'Email Verified',
           message: 'Your email has been successfully verified.',
         );
-        Get.offAll(() => const HomePage());
+        Get.offAll(() =>  HomePage());
       }
     } catch (e) {
       print('Error checking email verification: $e');
@@ -178,7 +178,7 @@ Future<void> createAccount({
         await storage.write('dob', dob);
         await storage.write('contact', contact);
 
-        Get.offAll(() => const HomePage());
+        Get.offAll(() =>  HomePage());
       } else {
         Loaders.successSnackBar(
           title: 'Sign up successful',
@@ -189,14 +189,14 @@ Future<void> createAccount({
     } else {
       Loaders.errorSnackBar(
         title: 'Failed to sign up',
-        message: responseBody['message'] ?? 'Unknown error occurred',
+        message: responseBody['message'],
       );
     }
   } catch (e) {
     Navigator.of(context).pop();
     Loaders.errorSnackBar(
       title: 'Failed to sign up',
-      message: 'Please check your internet connection',
+      message: e.toString(),
     );
     print('Network error: $e');
   }
@@ -253,7 +253,7 @@ Future<void> logIn({
         message: 'Welcome back',
       );
       await storage.write('email_verified', true);
-      Get.offAll(() => const HomePage());
+      Get.offAll(() =>  HomePage());
       await storage.write('user_email', email);
     } else {
       Loaders.errorSnackBar(
